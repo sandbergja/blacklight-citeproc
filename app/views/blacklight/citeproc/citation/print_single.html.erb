@@ -1,0 +1,6 @@
+<div class="modal-body">
+<% @citations.each do |citation| %>
+  <h3><%= t("blacklight.citeproc.styles.#{citation[:label]}") %></h3>
+  <%= citation[:citation] %>
+<% end %>
+</div>
