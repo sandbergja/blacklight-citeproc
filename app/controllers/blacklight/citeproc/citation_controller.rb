@@ -11,7 +11,7 @@ module Blacklight::Citeproc
 
     def initialize
       @processors = []
-      @bibliographies = []
+      @citations = []
 
       throw BadConfigError, 'Catalog controller needs a config.citeproc section' unless blacklight_config.citeproc
       @config = blacklight_config.citeproc
