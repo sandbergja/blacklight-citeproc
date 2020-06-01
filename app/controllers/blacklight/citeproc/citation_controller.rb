@@ -2,6 +2,7 @@
 
 require 'bibtex'
 require 'citeproc'
+require 'citeproc/ruby'
 require 'csl/styles'
 
 module Blacklight::Citeproc
@@ -9,16 +10,18 @@ module Blacklight::Citeproc
   end
 
   class CitationController < ApplicationController
+    include Blacklight::Bookmarks
     include Blacklight::Searchable
 
     def initialize
       @processors = []
       @citations = []
+      format = ::CiteProc::Ruby::Formats::Html.new bib_container: 'div', bib_entry: 'p'
 
       throw BadConfigError, 'Catalog controller needs a config.citeproc section' unless blacklight_config.citeproc
       @config = blacklight_config.citeproc
       @config[:styles].each do |style|
-        @processors << ::CiteProc::Processor.new(format: 'html', style: style)
+        @processors << ::CiteProc::Processor.new(format: format, style: style)
       end
     end
 
@@ -44,8 +47,7 @@ module Blacklight::Citeproc
 
       @processors.each do |processor|
         processor.import bibtex.to_citeproc
-        bibliography = processor.render(:bibliography)
-        @citations << { citation: bibliography.html_safe, label: processor.options[:style] }
+        @citations << { citation: processor.bibliography.join.html_safe, label: processor.options[:style] }
       end
       render :print_single, layout: false
     end
