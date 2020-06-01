@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is a document extension meant to be mixed into a
 # Blacklight::Solr::Document class, such as SolrDocument. It provides support
 # for creating bibtex format from a Solr document.
@@ -17,7 +19,7 @@ module Blacklight::Document::Bibtex
   end
 
   def self.register_export_formats(document)
-    document.will_export_as(:bibtex, "application/x-bibtex")
+    document.will_export_as(:bibtex, 'application/x-bibtex')
   end
 
   def export_as_bibtex
@@ -25,32 +27,29 @@ module Blacklight::Document::Bibtex
 
     entry = ::BibTeX::Entry.new
     entry.type = :book
-    entry.key = self.id
-    entry.title = self.first config[:fields][:title]
-    multiple_valued_fields = %i{author editor}
+    entry.key = id
+    entry.title = first config[:fields][:title]
+    multiple_valued_fields = %i[author editor]
     multiple_valued_fields.each do |field|
-      entry.send("#{field}=", self.fetch(config[:fields][field])) if self.has? config[:fields][field]
+      entry.send("#{field}=", fetch(config[:fields][field])) if has? config[:fields][field]
     end
 
-    single_valued_fields = %i{address annote booktitle chapter doi edition how_published institution
-      journal key month note number organization pages publisher school series url volume year}
+    single_valued_fields = %i[address annote booktitle chapter doi edition how_published institution
+                              journal key month note number organization pages publisher school series url volume year]
     single_valued_fields.each do |field|
-      entry.send("#{field}=", self.first(config[:fields][field])) if self.has? config[:fields][field]
+      entry.send("#{field}=", first(config[:fields][field])) if has? config[:fields][field]
     end
 
-    return entry
+    entry
   end
 
   private
-  def bibtex_type config
+
+  def bibtex_type(config)
     config[:format][:mappings].each do |bibtex, solr|
-      if solr.include? self.first config[:format][:field]
-        return bibtex
-      end
+      return bibtex if solr.include? first config[:format][:field]
     end
     default_type = config[:format][:default_format] || :book
-    return default_type
+    default_type
   end
-
 end
-
