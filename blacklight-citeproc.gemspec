@@ -21,13 +21,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency "bibtex-ruby", ">= 4.4.6"
+  spec.add_dependency "bibtex-ruby", ">= 4.4.6", "< 7"
   spec.add_dependency "citeproc-ruby", "~> 1.1"
-  spec.add_dependency "csl-styles", "~> 1.0.1.9"
+  spec.add_dependency "csl-styles", "~> 1.0"
 
   spec.add_development_dependency "rspec-rails", "~> 3.0"
-  spec.add_development_dependency "engine_cart", "~> 2.0"
-  spec.add_development_dependency "solr_wrapper"
 
 end
 
