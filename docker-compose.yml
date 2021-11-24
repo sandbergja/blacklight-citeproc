@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - BLACKLIGHT_VERSION=${BLACKLIGHT_VERSION}
+        - RAILS_VERSION=${RAILS_VERSION}
+    volumes:
+      - .:/gem
+    depends_on:
+      - solr
+    ports:
+      - "3000:3000"
+    environment:
+      - SOLR_URL=${SOLR_URL}
+
+  solr:
+    environment:
+      - SOLR_VERSION
+    image: "solr:8"
+    volumes:
+      - .internal_test_app/solr/conf:/opt/solr/conf
+    ports:
+      - "8983:8983"
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - blacklight-core
+      - /opt/solr/conf
+      - "-Xms256m"
+      - "-Xmx512m"

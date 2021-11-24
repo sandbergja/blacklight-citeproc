@@ -84,3 +84,6 @@ en:
         apa: APA 6th Edition
 ```
 
+## Development
+
+You can get a very simple blacklight app that uses this gem by running `docker-compose up -d`.
