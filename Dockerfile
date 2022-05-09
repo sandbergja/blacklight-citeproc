@@ -1,4 +1,4 @@
-FROM ruby:2.6.5-alpine
+FROM ruby:2.7.5-alpine
 
 ARG RAILS_VERSION
 ARG BLACKLIGHT_VERSION
