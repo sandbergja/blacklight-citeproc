@@ -6,6 +6,7 @@ ARG BLACKLIGHT_VERSION
 RUN apk add --update --no-cache \
   bash \
   build-base \
+  gcompat \
   git \
   libxml2-dev \
   libxslt-dev \
@@ -22,8 +23,7 @@ RUN chown -R blacklight /app /gem
 
 USER blacklight
 
-RUN gem update --system && \
-  gem install bundler && \
+RUN gem install bundler && \
   bundle config build.nokogiri --use-system-libraries && \
   gem install rails -v $RAILS_VERSION
 
