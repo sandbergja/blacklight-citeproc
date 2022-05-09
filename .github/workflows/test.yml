@@ -22,4 +22,4 @@ jobs:
       - name: Install dependencies
         run: bundle install
       - name: Run linter
-        run: bundle exec rake rubocop
+        run: bundle exec rubocop
