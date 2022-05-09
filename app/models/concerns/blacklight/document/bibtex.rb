@@ -13,43 +13,46 @@
 
 require 'bibtex'
 
-module Blacklight::Document::Bibtex
-  def self.extended(document)
-    Blacklight::Document::Bibtex.register_export_formats(document)
-  end
+module Blacklight
+  module Document
+    module Bibtex
+      def self.extended(document)
+        Blacklight::Document::Bibtex.register_export_formats(document)
+      end
 
-  def self.register_export_formats(document)
-    document.will_export_as(:bibtex, 'application/x-bibtex')
-  end
+      def self.register_export_formats(document)
+        document.will_export_as(:bibtex, 'application/x-bibtex')
+      end
 
-  def export_as_bibtex
-    config = ::CatalogController.blacklight_config.citeproc
+      def export_as_bibtex
+        config = ::CatalogController.blacklight_config.citeproc
 
-    entry = ::BibTeX::Entry.new
-    entry.type = :book
-    entry.key = id
-    entry.title = first config[:fields][:title]
-    multiple_valued_fields = %i[author editor]
-    multiple_valued_fields.each do |field|
-      entry.send("#{field}=", fetch(config[:fields][field])) if has? config[:fields][field]
+        entry = ::BibTeX::Entry.new
+        entry.type = :book
+        entry.key = id
+        entry.title = first config[:fields][:title]
+        multiple_valued_fields = %i[author editor]
+        multiple_valued_fields.each do |field|
+          entry.send("#{field}=", fetch(config[:fields][field])) if has? config[:fields][field]
+        end
+
+        single_valued_fields = %i[address annote booktitle chapter doi edition how_published institution
+                                  journal key month note number organization pages publisher school series url volume year]
+        single_valued_fields.each do |field|
+          entry.send("#{field}=", first(config[:fields][field])) if has? config[:fields][field]
+        end
+
+        entry
+      end
+
+      private
+
+      def bibtex_type(config)
+        config[:format][:mappings].each do |bibtex, solr|
+          return bibtex if solr.include? first config[:format][:field]
+        end
+        config[:format][:default_format] || :book
+      end
     end
-
-    single_valued_fields = %i[address annote booktitle chapter doi edition how_published institution
-                              journal key month note number organization pages publisher school series url volume year]
-    single_valued_fields.each do |field|
-      entry.send("#{field}=", first(config[:fields][field])) if has? config[:fields][field]
-    end
-
-    entry
-  end
-
-  private
-
-  def bibtex_type(config)
-    config[:format][:mappings].each do |bibtex, solr|
-      return bibtex if solr.include? first config[:format][:field]
-    end
-    default_type = config[:format][:default_format] || :book
-    default_type
   end
 end
