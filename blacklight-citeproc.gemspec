@@ -10,9 +10,9 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Jane Sandberg"]
   spec.email       = ["sandbej@linnbenton.edu"]
   spec.homepage    = "https://github.com/sandbergja/blacklight-citeproc"
-  spec.summary     = ""
-  spec.description = ""
-  spec.license     = "Apache-2.0"
+  spec.summary     = "Generate and display citeproc citations in a Blacklight app"
+  spec.description = "Swap in really accurate citations using a wide variety of citation styles to your Blacklight app"
+  spec.license     = "MIT"
   
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
