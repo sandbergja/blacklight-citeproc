@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.name        = 'blacklight-citeproc'
   spec.version     = Blacklight::Citeproc::VERSION
   spec.authors     = ['Jane Sandberg']
-  spec.email       = ['sandbej@linnbenton.edu']
+  spec.email       = ['sandbergja@gmail.com']
   spec.homepage    = 'https://github.com/sandbergja/blacklight-citeproc'
   spec.summary     = 'Generate and display citeproc citations in a Blacklight app'
   spec.description = 'Swap in really accurate citations using a wide variety of citation styles to your Blacklight app'
